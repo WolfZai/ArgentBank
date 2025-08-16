@@ -1,19 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { login } from '../store/api/authApi';
-import { setCredentials, setError, clearError } from '../store/slices/authSlice';
-import { selectError, selectIsAuthenticated } from '../store/slices/authSlice';
-import '../assets/css/main.css';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useLoginMutation } from "../store/api/authApi";
+import {
+  setCredentials,
+  setError,
+  clearError,
+} from "../store/slices/authSlice";
+import { selectError, selectIsAuthenticated } from "../store/slices/authSlice";
+import "../assets/css/main.css";
 
 function SignIn() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
-  
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   
+  // Hook RTK Query pour la mutation de login
+  const [login, { isLoading }] = useLoginMutation();
+
   // Sélecteurs Redux
   const error = useSelector(selectError);
   const isAuthenticated = useSelector(selectIsAuthenticated);
@@ -21,13 +28,13 @@ function SignIn() {
   // Redirection si déjà connecté
   useEffect(() => {
     if (isAuthenticated) {
-      navigate('/user');
+      navigate("/user");
     }
   }, [isAuthenticated, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     // Nettoyer les erreurs précédentes
     dispatch(clearError());
 
@@ -36,48 +43,49 @@ function SignIn() {
       const result = await login({
         email,
         password,
-      });
+      }).unwrap();
 
-      console.log('Résultat de la connexion:', result);
-      
+      console.log("Connexion réussie:", result);
 
       // Si succès, sauvegarder les credentials
-      dispatch(setCredentials({
-        user: result.body, // L'API retourne les données user dans body
-        token: result.body.token,
-      }));
-      
+      dispatch(
+        setCredentials({
+          user: null, // Les données user seront récupérées avec getProfile
+          token: result.body.token, // Le token est dans body.token
+        })
+      );
+
       // Rediriger vers la page utilisateur
-      navigate('/user');
-      
+      navigate("/user");
     } catch (err) {
       // Gestion des erreurs
-      console.error('Erreur de connexion:', err);
-      dispatch(setError(
-        err.data?.message || 'Erreur de connexion. Vérifiez vos identifiants.'
-      ));
+      console.error("Erreur de connexion:", err);
+      const errorMessage = err.data?.message || err.message || "Erreur de connexion. Vérifiez vos identifiants.";
+      dispatch(setError(errorMessage));
     }
   };
 
   return (
     <>
-      
       <main className="main bg-dark">
         <section className="sign-in-content">
           <i className="fa fa-user-circle sign-in-icon"></i>
           <h1>Sign In</h1>
-          
+
           {/* Affichage des erreurs */}
           {error && (
-            <div className="error-message" style={{ 
-              color: 'red', 
-              marginBottom: '1rem', 
-              textAlign: 'center' 
-            }}>
+            <div
+              className="error-message"
+              style={{
+                color: "red",
+                marginBottom: "1rem",
+                textAlign: "center",
+              }}
+            >
               {error}
             </div>
           )}
-          
+
           <form onSubmit={handleSubmit}>
             <div className="input-wrapper">
               <label htmlFor="email">Email</label>
@@ -87,7 +95,7 @@ function SignIn() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-
+                disabled={isLoading}
               />
             </div>
             <div className="input-wrapper">
@@ -109,15 +117,12 @@ function SignIn() {
               />
               <label htmlFor="remember-me">Remember me</label>
             </div>
-            <button 
-              type="submit" 
-              className="sign-in-button"
-            >
+            <button type="submit" className="sign-in-button" disabled={isLoading}>
+              {isLoading ? "Connexion..." : "Sign In"}
             </button>
           </form>
         </section>
       </main>
-
     </>
   );
 }
