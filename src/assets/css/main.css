@@ -276,6 +276,43 @@ body {
   color: #fff;
 }
 
+/* Styles pour le formulaire d'édition du profil */
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.edit-form .input-wrapper {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  margin-bottom: 1rem;
+}
+
+.edit-form label {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: #fff;
+}
+
+.edit-form input {
+  padding: 5px;
+  font-size: 1.2rem;
+}
+
+.error-message {
+  background-color: #ff6b6b;
+  color: white;
+  padding: 1rem;
+  border-radius: 4px;
+  margin: 1rem 0;
+}
+
 @media (min-width: 720px) {
   .account {
     flex-direction: row;
@@ -287,5 +324,16 @@ body {
 
   .transaction-button {
     width: 200px;
+  }
+  
+  .edit-form {
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 1rem;
+  }
+  
+  .edit-form .input-wrapper {
+    margin-bottom: 0;
   }
 }
