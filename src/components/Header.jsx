@@ -1,4 +1,4 @@
-import logo from '../assets/img/argentBankLogo.png';
+import logo from '../assets/img/argentBankLogo_resultat.webp';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectCurrentUser, selectIsAuthenticated, logout } from '../store/slices/authSlice';
@@ -28,7 +28,7 @@ export default function Header() {
           <>
             <Link className="main-nav-item" to="/user">
               <i className="fa fa-user-circle"></i>
-              {user?.firstName || 'User'}
+              {user?.userName || 'User'}
             </Link>
             <button 
               className="main-nav-item" 

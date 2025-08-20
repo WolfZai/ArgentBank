@@ -1,7 +1,7 @@
 // src/pages/Home.jsx
-import chatIcon from '../assets/img/icon-chat.png';
-import moneyIcon from '../assets/img/icon-money.png';
-import securityIcon from '../assets/img/icon-security.png';
+import chatIcon from '../assets/img/icon-chat_resultat.webp';
+import moneyIcon from '../assets/img/icon-money_resultat.webp';
+import securityIcon from '../assets/img/icon-security_resultat.webp';
 import Feature from '../components/Feature';
 
 export default function Home() {

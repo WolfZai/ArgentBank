@@ -16,7 +16,7 @@ export const authApi = createApi({
   baseQuery,
   tagTypes: ['User'],
   endpoints: (builder) => ({
-    // Endpoint pour la connexion (utilise username et password)
+    // Endpoint pour la connexion (utilise email et password)
     login: builder.mutation({
       query: (credentials) => ({
         url: 'user/login',
